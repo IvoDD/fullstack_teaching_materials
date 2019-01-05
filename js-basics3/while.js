@@ -1,7 +1,11 @@
-var b=1, c=1;
+function double_fact(){
+    var n = Number( document.getElementById("in").value );
 
-while(b < 250){
-    console.log(b);
-    b *= c;
-    c++;
+    var b=1, c=2;
+    while(c < n+1){
+        b *= c;
+        c += 2;
+    }
+    
+    document.getElementById("answer").innerHTML = b;
 }
