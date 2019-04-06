@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <script>
+            function send(){
+                var textfield = document.getElementById("text")
+                var msg = textfield.value;
+                textfield.value = "";
+                var msgfield = document.getElementById("messages");
+                //как да създадем елемент (параграф)
+                var newmsg = document.createElement("p");
+                //как да добавя параграфа newmsg като наследник на msgfield
+                msgfield.appendChild(newmsg);
+                //създавам textNode
+                var textnode = document.createTextNode(msg);
+                //добавям textNode-а като наследник на параграфа
+                newmsg.appendChild(textnode);
+            }
+        </script>
+    </head>
+    <body>
+        <div id="messages">
+        </div>
+        <form>
+            <input id="text" type="text">
+        </form>
+        <button onclick="send();">Send</button>
+    </body>
+</html>
