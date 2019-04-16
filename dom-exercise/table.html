@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+    <head>
+        <script>
+            var n=1, m=1;
+            function addrow(){
+                var tbody = document.getElementById("body");
+                var tr = document.createElement("tr");
+                for (let i=0; i<m; ++i){
+                    let td = document.createElement("td");
+                    td.appendChild(document.createTextNode((n+1) + "," + (i+1)));
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+                ++n;
+            }
+            function addcol(){
+                var trs = document.getElementById("body").children;
+                for (let i=0; i<n; ++i){
+                    let td = document.createElement("td");
+                    td.appendChild(document.createTextNode((i+1) + "," + (m+1)));
+                    trs[i].appendChild(td);
+                }
+                ++m;
+            }
+        </script>
+        <style>
+            table, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            td{
+                padding: 5px;
+                text-align: center;
+            }
+            button{
+                border: 0px;
+                padding: 10px;
+                background-color: blue;
+                margin-bottom: 10px;
+                color: #FFC700;
+                border-radius: 10px;
+            }
+            .asdf{
+                background-color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="addrow();">Add row</button>
+        <button onclick="addcol();">Add column</button>
+        <table>
+            <tbody id="body">
+                <tr><td class="asdf">1,1</td></tr>
+            </tbody>
+        </table>
+    </body>
+</html>

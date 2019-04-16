@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+    <head>
+        <script>
+            function asdf(a, b){
+                console.log("clicked", a, b);
+            }
+            var n=1, m=1;
+            function addrow(){
+                var tbody = document.getElementById("body");
+                var tr = document.createElement("tr");
+                for (let i=0; i<m; ++i){
+                    let td = document.createElement("td");
+                    let y = n+1
+                    td.onclick = function(){asdf(y, i+1);};
+                    td.appendChild(document.createTextNode((n+1) + "," + (i+1)));
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+                ++n;
+            }
+            function addcol(){
+                var trs = document.getElementById("body").children;
+                for (let i=0; i<n; ++i){
+                    let td = document.createElement("td");
+                    let x = m+1
+                    td.onclick = function(){asdf(i+1, x);};
+                    td.appendChild(document.createTextNode((i+1) + "," + (m+1)));
+                    trs[i].appendChild(td);
+                }
+                ++m;
+            }
+        </script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+        <div class="container">
+            <button onclick="addrow();">Add row</button>
+            <button onclick="addcol();">Add column</button>
+            <table class="table table-striped table-bordered">
+                <tbody id="body">
+                    <tr><td class="asdf">1,1</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
