@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+            socket.on("asdf", function(message){
+                console.log(message);
+            });
+            socket.on("msg_to_everyone", function(msg){
+                var parent = document.getElementById("messages");
+                var p = document.createElement("p");
+                p.appendChild(document.createTextNode(msg));
+                parent.appendChild(p);
+            });
+            function send(){
+                var text_field = document.getElementById('msg');
+                socket.emit("msg_to_server", text_field.value);
+                text_field.value = "";
+            }
+        </script>
+    </head>
+    <body>
+        <div id="messages">
+        </div>
+        <form>
+            <input id="msg" type="text"/>
+        </form>
+        <button onclick="send()">Send</button>
+    </body>
+</html>
