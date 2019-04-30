@@ -11,12 +11,15 @@ app.get('/game.js', function(req, res){
 
 //тук код който се изпълнява в началото на работата на сървъра
 console.log("hello");
+var history = [];
 
 io.on('connection', function(socket){
     //тук е кодът който се изпълнява всеки път се свърже нов потребител (създаде канал за комуникация на съобщения)
     console.log("connection");
+    socket.emit("chat history", history);
     socket.emit("asdf", "Hello from server socket");
     socket.on("msg_to_server", function(msg){
+        history.push(msg);
         io.emit("msg_to_everyone", msg);
     });
 });

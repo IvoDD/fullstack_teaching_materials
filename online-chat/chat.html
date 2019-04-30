@@ -1,31 +1,98 @@
 <!doctype html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+            .p{
+                margin-top: 5px;
+                margin-bottom: 5px;
+                padding: 10px;
+                border-radius: 10px;
+            }
+            input{
+                width: 100%;
+            }
+            #messages{
+                height: 800px;
+                overflow: scroll;
+            }
+        </style>
         <script src="socket.io/socket.io.js"></script>
         <script>
-            var socket = io();
-            socket.on("asdf", function(message){
-                console.log(message);
-            });
-            socket.on("msg_to_everyone", function(msg){
+            function getTextWidth(text, font) {
+                // re-use canvas object for better performance
+                var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+                var context = canvas.getContext("2d");
+                context.font = font;
+                var metrics = context.measureText(text);
+                return metrics.width;
+            }
+            var name;
+            var socket;
+            function addp(msg){
                 var parent = document.getElementById("messages");
-                var p = document.createElement("p");
+                var p = document.createElement("div");
+                p.className="p";
                 p.appendChild(document.createTextNode(msg));
+                let w = 1.2*getTextWidth(msg, "16px Helvetica Neue") + 20;
+                if (w > 500) w = 500;
+                p.style.width = w + "px";
+                var ismine = true;
+                for (let i=0; i<name.length; ++i){
+                    if (name[i] != msg[i]){
+                        ismine = false;
+                        break;
+                    }
+                }
+                if (ismine){
+                    p.style.backgroundColor = "#1133ff";
+                    p.style.color = "white";
+                    p.style.marginLeft = "auto";
+                }else{
+                    p.style.backgroundColor = "gray";
+                }
                 parent.appendChild(p);
-            });
-            function send(){
+            }
+            function send(e){
+                e.preventDefault();
                 var text_field = document.getElementById('msg');
-                socket.emit("msg_to_server", text_field.value);
+                socket.emit("msg_to_server", name + ": " + text_field.value);
                 text_field.value = "";
+                return false;
+            }
+            function login(e){
+                e.preventDefault();
+                name = document.getElementById("name").value;
+                document.getElementById("login").style.display = "none";
+                document.getElementById("chat").style.display = "block";
+                socket = io();
+                socket.on("chat history", function(history){
+                    for (let i=0; i<history.length; ++i){
+                        addp(history[i]);
+                    }
+                })
+                socket.on("msg_to_everyone", function(msg){
+                    addp(msg);
+                });
+                return false;
             }
         </script>
     </head>
     <body>
-        <div id="messages">
+        <div id="chat" style="display:none" class="container">
+            <div id="messages">
+            </div>
+            <form style="position: fixed; bottom: 0px;" onsubmit="return send(event);">
+                <input style="width:100%" id="msg" type="text"/>
+                <input type="file"/>
+                <button>Send</button>
+            </form>
         </div>
-        <form>
-            <input id="msg" type="text"/>
-        </form>
-        <button onclick="send()">Send</button>
+        <div id="login" class="container">
+            <form onsubmit="return login(event);">
+                <input id="name" type="text" placeholder="Name here"/>
+                <button>Log in</button>
+            </form>
+        </div>
     </body>
 </html>
