@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            td, table{
+                padding: 0px;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+        <script src="socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+            socket.on("init_table", function(table){
+                let sheet = document.getElementById("sheet");
+                for (let i=0; i<table.length; ++i){
+                    let tr = document.createElement("tr");
+                    sheet.appendChild(tr);
+                    for (let j=0; j<table[i].length; ++j){
+                        let td = document.createElement("td");
+                        tr.appendChild(td);
+                        let form = document.createElement("form");
+                        let input = document.createElement("input");
+                        td.appendChild(form);
+                        form.appendChild(input);
+                        form.onsubmit = function(e){
+                            e.preventDefault();
+                            myFunction(i, j);
+                            return false;
+                        }
+                        input.id = "in"+i+"_"+j;
+                        input.onchange = function(){
+                            myFunction(i, j);
+                        }
+                        input.value = table[i][j];
+                    }
+                }
+            });
+            socket.on("change", function(i, j, value){
+                var text_field = document.getElementById('in'+i+"_"+j);
+                text_field.value = value;
+            })
+            
+            function myFunction(i, j) {
+                var text_field = document.getElementById('in'+i+"_"+j);
+                socket.emit("change_field", i, j, text_field.value);
+            }
+        </script>
+    </head>
+    <body>
+        <table>
+            <tbody id="sheet"></tbody>
+        </table>  
+    </body>
+</html>
