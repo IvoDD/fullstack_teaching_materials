@@ -1,6 +1,7 @@
 var socket = io();
 
 var w = [], p = [], b = [], ind = -1;
+var cooldown = 500;
 
 socket.on("init", function(ind_, w_, p_, b_){
     ind = ind_;
@@ -17,6 +18,7 @@ socket.on("newp", function(ind_, p_, b_){
 var speed = 4;
 
 function update() {
+    --cooldown;
     if (ind == -1) return;
     let oldx = p[ind].x;//p[ind] - undefined
     let oldy = p[ind].y;
@@ -80,7 +82,10 @@ function draw() {
     }
 };
 function keyup(key) {
-    
+    if (key==32 && cooldown<=0){
+        for (let alpha=0; alpha<2*Math.PI; alpha+=0.1) b[ind].push({x: p[ind].x, y: p[ind].y, dx:10*Math.cos(alpha), dy:10*Math.sin(alpha)});
+        cooldown = 500;
+	}
 };
 function mouseup() {
     let d = Math.sqrt((p[ind].x-mouseX)*(p[ind].x-mouseX) + (p[ind].y-mouseY)*(p[ind].y-mouseY));
