@@ -1,4 +1,7 @@
 *images*
 *start.html
 *node_modules*
+*.o
+*.exe
+
 
